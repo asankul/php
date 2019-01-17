@@ -1,7 +1,7 @@
 <?php 
 
 	$user = 'root';
-	$password = 'asan';
+	$password = 'linux';
 	$db = 'articles';
 	$host = 'localhost';
 
@@ -9,5 +9,5 @@
 
 	$pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
-
+	
 ?>

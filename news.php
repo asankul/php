@@ -7,7 +7,18 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Создание статей</title>
+    <?php 
+      require_once 'mysql_connect.php';
+      $sql = 'SELECT * FROM `article` WHERE `id` = :id';
+      $id = $_GET['id'];
+      $query = $pdo->prepare($sql);
+      $query->execute(['id' => $_GET['id']]);
+      $article = $query->fetch(PDO::FETCH_OBJ);
+      
+    ?>
+    <title>
+      <?= $article->title; ?>
+    </title>
 
     <!-- Bootstrap core CSS -->
 <link href="/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -36,32 +47,9 @@
   <div class="row">
     <?php require 'blocks/tags.php'; ?>
     <div class="col-md-8 order-md-1">
-      <h4 class="mb-3">Добавление новой статьи</h4>
-      <form onsubmit="return false;" method="post">
-        <div class="mb-3">
-        <label for="dateofbirth">Дата</label>
-        <input type="date" name="dateofbirth" id="dateofbirth">
-        </div>
-        <div class="mb-3">
-          <label for="title">Введите тему статьи</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="title" name='title' >
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="intro">Введите текст статьи</label>
-          <div class="input-group">
-            <textarea class="form-control" rows="8" cols="80" id="intro" name='intro'></textarea>
-          </div>
-        </div>
-        <div class="mb-3">
-          <div class="alert alert-danger" id="errorBlock"></div>
-        </div>
-
-        <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block" id="article" >Добавить статью</button>
-      </form>
+      <h4 class="mb-3"><?= $article->title; ?></h4>
+      <p><?= $article->dateofbirth; ?></p>
+      <p><?= $article->intro; ?></p>
     </div>
   </div>
 
@@ -72,14 +60,13 @@
   $('#article').click(function() {
     var title = $('#title').val();
     var intro = $('#intro').val();
-    var dateofbirth = $('#dateofbirth').val();
     
     
     $.ajax({
       url: 'ajax/article.php',
       type: 'POST',
       cache: false,
-      data: {'title' : title, 'intro' : intro, 'dateofbirth' : dateofbirth},
+      data: {'title' : title, 'intro' : intro},
       dataType: 'html',
       success: function(data) {
         if(data == "Готово") {

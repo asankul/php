@@ -2,6 +2,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -38,9 +39,15 @@
       $sql = 'SELECT * FROM `article` ORDER BY `id` DESC';
       $query = $pdo->query($sql);
       while($row = $query->fetch(PDO::FETCH_OBJ)) {
+        $text = $row->intro;
+
         echo "<h2>$row->title</h2>
-              <p>$row->intro</p>
-              <button>Читать далее</button>";
+              <p>$row->dateofbirth</p>";
+        echo mb_strimwidth($text, 0, 400, '...');     
+        echo "<a href='news.php?id=$row->id' title='$row->title'>
+              <button>Читать далее</button>
+              </a>
+              ";
       }
     ?>
   

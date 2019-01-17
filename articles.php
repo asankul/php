@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Создание статей</title>
+    <title>Статьи</title>
 
     <!-- Bootstrap core CSS -->
 <link href="/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -31,48 +31,27 @@
   </head>
   <body class="bg-light">
     <div class="container">
-  <?php require 'blocks/header.php'; ?>
+    <?php require 'blocks/header.php'; ?>
+    
+    <?php 
+      require_once 'mysql_connect.php';
+      $sql = 'SELECT * FROM `article` ORDER BY `id` DESC';
+      $query = $pdo->query($sql);
+      while($row = $query->fetch(PDO::FETCH_OBJ)) {
+        echo "<h2>$row->title</h2>
+              <p>$row->intro</p>
+              <button>Читать далее</button>";
+      }
+    ?>
+  
 
-  <div class="row">
-    <?php require 'blocks/tags.php'; ?>
-    <div class="col-md-8 order-md-1">
-      <h4 class="mb-3">Добавление новой статьи</h4>
-      <form onsubmit="return false;" method="post">
-        <div class="mb-3">
-        <label for="dateofbirth">Дата</label>
-        <input type="date" name="dateofbirth" id="dateofbirth">
-        </div>
-        <div class="mb-3">
-          <label for="title">Введите тему статьи</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="title" name='title' >
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="intro">Введите текст статьи</label>
-          <div class="input-group">
-            <textarea class="form-control" rows="8" cols="80" id="intro" name='intro'></textarea>
-          </div>
-        </div>
-        <div class="mb-3">
-          <div class="alert alert-danger" id="errorBlock"></div>
-        </div>
-
-        <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block" id="article" >Добавить статью</button>
-      </form>
+    <?php require 'blocks/footer.php'; ?>
     </div>
-  </div>
-
-  <?php require 'blocks/footer.php'; ?>
-</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
   $('#article').click(function() {
     var title = $('#title').val();
     var intro = $('#intro').val();
-    
     
     $.ajax({
       url: 'ajax/article.php',
@@ -93,6 +72,5 @@
     });  
   });
 </script>
-
 </body>
 </html>
